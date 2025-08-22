@@ -371,7 +371,8 @@ func TestMultipleMetadataParams(t *testing.T) {
 // Benchmark tests
 func BenchmarkGenerate(b *testing.B) {
 	key := make([]byte, 32)
-	rand.Read(key)
+	_, err := rand.Read(key)
+	require.NoError(b, err)
 
 	r, err := NewRigid(key)
 	require.NoError(b, err)
@@ -385,7 +386,8 @@ func BenchmarkGenerate(b *testing.B) {
 
 func BenchmarkVerify(b *testing.B) {
 	key := make([]byte, 32)
-	rand.Read(key)
+	_, err := rand.Read(key)
+	require.NoError(b, err)
 
 	r, err := NewRigid(key)
 	require.NoError(b, err)
@@ -402,7 +404,8 @@ func BenchmarkVerify(b *testing.B) {
 
 func BenchmarkGenerateWithMetadata(b *testing.B) {
 	key := make([]byte, 32)
-	rand.Read(key)
+	_, err := rand.Read(key)
+	require.NoError(b, err)
 
 	r, err := NewRigid(key)
 	require.NoError(b, err)
