@@ -269,6 +269,15 @@ MIT License - see LICENSE file for details.
 
 ## Changelog
 
+### v1.0.1
+- **Documentation**: Update README with actual benchmark results from Apple M1 Pro
+- **Documentation**: Add comprehensive Table of Contents with navigation links
+- **Code Quality**: Fix concurrent generation race conditions and improve thread safety
+- **Code Quality**: Fix various linting errors (gofmt, errcheck, fmt redundancy)
+- **CI/CD**: Improve CI workflow and update golangci-lint configuration
+- **Code Quality**: Code formatting improvements across examples and tests
+- **Bug Fix**: Fix Go version compatibility issues
+
 ### v1.0.0
 - Complete rewrite to match Python rigid library API
 - ULID-based implementation using github.com/oklog/ulid/v2
