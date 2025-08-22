@@ -14,11 +14,11 @@ import (
 )
 
 var (
-	ErrInvalidFormat      = errors.New("invalid rigid format")
-	ErrInvalidULID        = errors.New("invalid ULID")
-	ErrIntegrityFailure   = errors.New("integrity verification failed")
-	ErrEmptySecretKey     = errors.New("secret key cannot be empty")
-	ErrInvalidSigLength   = errors.New("signature length must be positive")
+	ErrInvalidFormat    = errors.New("invalid rigid format")
+	ErrInvalidULID      = errors.New("invalid ULID")
+	ErrIntegrityFailure = errors.New("integrity verification failed")
+	ErrEmptySecretKey   = errors.New("secret key cannot be empty")
+	ErrInvalidSigLength = errors.New("signature length must be positive")
 )
 
 const (
@@ -60,7 +60,7 @@ func NewRigid(secretKey []byte, signatureLength ...int) (*Rigid, error) {
 		entropy:         entropy,
 	}
 	copy(r.secretKey, secretKey)
-	
+
 	return r, nil
 }
 
@@ -72,14 +72,14 @@ func (r *Rigid) Generate(metadata ...string) (string, error) {
 	}
 
 	ulidStr := ulidObj.String()
-	
+
 	var metadataStr string
 	if len(metadata) > 0 {
 		metadataStr = metadata[0]
 	}
 
 	signature := r.generateSignature(ulidStr, metadataStr)
-	
+
 	result := ulidStr + "-" + signature
 	if metadataStr != "" {
 		result += "-" + metadataStr
@@ -108,7 +108,7 @@ func (r *Rigid) Verify(secureULID string) (VerifyResult, error) {
 	}
 
 	expectedSignature := r.generateSignature(ulidStr, metadata)
-	
+
 	if len(signature) != len(expectedSignature) {
 		return result, ErrIntegrityFailure
 	}
@@ -126,7 +126,7 @@ func (r *Rigid) Verify(secureULID string) (VerifyResult, error) {
 
 func (r *Rigid) ExtractULID(secureULID string) (ulid.ULID, error) {
 	var zeroULID ulid.ULID
-	
+
 	parts := strings.Split(secureULID, "-")
 	if len(parts) < 2 {
 		return zeroULID, ErrInvalidFormat
