@@ -1,3 +1,54 @@
+// Package rigid provides cryptographically secured ULIDs (Universally Unique Lexicographically Sortable Identifiers)
+// with built-in HMAC-based integrity verification.
+//
+// Rigid generates tamper-proof, time-ordered unique identifiers that include cryptographic signatures
+// to ensure integrity and prevent forgery. It supports optional metadata binding and configurable
+// signature lengths for different security requirements.
+//
+// # Basic Usage
+//
+//	secretKey := []byte("your-secret-key")
+//	r, err := rigid.NewRigid(secretKey)
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//
+//	// Generate a secure ULID
+//	rigidID, err := r.Generate()
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//
+//	// Generate with metadata
+//	rigidWithMetadata, err := r.Generate("user:alice:role:admin")
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//
+//	// Verify integrity
+//	result, err := r.Verify(rigidWithMetadata)
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//	fmt.Printf("Valid: %t, Metadata: %s\n", result.Valid, result.Metadata)
+//
+// # Security Features
+//
+// - HMAC-SHA256 cryptographic signatures prevent tampering and forgery
+// - Constant-time verification resists timing attacks
+// - Configurable signature lengths (4-32 bytes) for security/size trade-offs
+// - Thread-safe concurrent generation with monotonic entropy
+//
+// # ID Format
+//
+// Rigid IDs follow the format: ULID-SIGNATURE or ULID-SIGNATURE-METADATA
+//
+// Example: 01ARZ3NDEKTSV4RRFFQ69G5FAV-MFRGG2BA-user:session:12345
+//
+// # Compatibility
+//
+// This implementation is compatible with the Python rigid library when using
+// the same secret key, signature length, and HMAC algorithm.
 package rigid
 
 import (
@@ -14,20 +65,33 @@ import (
 	"github.com/oklog/ulid/v2"
 )
 
+// Error variables returned by rigid operations.
 var (
-	ErrInvalidFormat    = errors.New("invalid rigid format")
-	ErrInvalidULID      = errors.New("invalid ULID")
+	// ErrInvalidFormat indicates the rigid ID format is invalid.
+	ErrInvalidFormat = errors.New("invalid rigid format")
+	// ErrInvalidULID indicates the ULID component is malformed.
+	ErrInvalidULID = errors.New("invalid ULID")
+	// ErrIntegrityFailure indicates the signature verification failed.
 	ErrIntegrityFailure = errors.New("integrity verification failed")
-	ErrEmptySecretKey   = errors.New("secret key cannot be empty")
+	// ErrEmptySecretKey indicates the provided secret key is empty or nil.
+	ErrEmptySecretKey = errors.New("secret key cannot be empty")
+	// ErrInvalidSigLength indicates the signature length is outside valid range.
 	ErrInvalidSigLength = errors.New("signature length must be positive")
 )
 
+// Constants defining signature length constraints.
 const (
+	// DefaultSignatureLength is the default HMAC signature length in bytes.
 	DefaultSignatureLength = 8
-	MinSignatureLength     = 4
-	MaxSignatureLength     = 32
+	// MinSignatureLength is the minimum allowed signature length in bytes.
+	MinSignatureLength = 4
+	// MaxSignatureLength is the maximum allowed signature length in bytes.
+	MaxSignatureLength = 32
 )
 
+// Rigid is the main structure for generating and verifying cryptographically secured ULIDs.
+// It maintains the secret key, signature configuration, and entropy source for ULID generation.
+// All methods are thread-safe for concurrent use.
 type Rigid struct {
 	secretKey       []byte
 	signatureLength int
@@ -35,12 +99,20 @@ type Rigid struct {
 	mu              sync.Mutex
 }
 
+// VerifyResult contains the results of a rigid ID verification operation.
 type VerifyResult struct {
-	Valid    bool
-	ULID     string
+	// Valid indicates whether the rigid ID passed integrity verification.
+	Valid bool
+	// ULID contains the extracted ULID string.
+	ULID string
+	// Metadata contains the extracted metadata string, if any.
 	Metadata string
 }
 
+// NewRigid creates a new Rigid instance with the provided secret key.
+// The optional signatureLength parameter sets the HMAC signature length in bytes (4-32).
+// If not provided, DefaultSignatureLength (8 bytes) is used.
+// Returns an error if the secret key is empty or signature length is invalid.
 func NewRigid(secretKey []byte, signatureLength ...int) (*Rigid, error) {
 	if len(secretKey) == 0 {
 		return nil, ErrEmptySecretKey
@@ -66,6 +138,10 @@ func NewRigid(secretKey []byte, signatureLength ...int) (*Rigid, error) {
 	return r, nil
 }
 
+// Generate creates a new cryptographically secured ULID with optional metadata.
+// The optional metadata parameter will be cryptographically bound to the ID.
+// Only the first metadata parameter is used if multiple are provided.
+// Returns the generated rigid ID string or an error if generation fails.
 func (r *Rigid) Generate(metadata ...string) (string, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -93,6 +169,9 @@ func (r *Rigid) Generate(metadata ...string) (string, error) {
 	return result, nil
 }
 
+// Verify checks the integrity and authenticity of a rigid ID.
+// Returns a VerifyResult containing validation status, extracted ULID, and metadata.
+// Returns an error if the ID format is invalid or verification fails.
 func (r *Rigid) Verify(secureULID string) (VerifyResult, error) {
 	result := VerifyResult{}
 
@@ -129,6 +208,8 @@ func (r *Rigid) Verify(secureULID string) (VerifyResult, error) {
 	return result, nil
 }
 
+// ExtractULID extracts and parses the ULID component from a rigid ID.
+// Returns the parsed ULID object or an error if extraction fails.
 func (r *Rigid) ExtractULID(secureULID string) (ulid.ULID, error) {
 	var zeroULID ulid.ULID
 
@@ -145,6 +226,8 @@ func (r *Rigid) ExtractULID(secureULID string) (ulid.ULID, error) {
 	return ulidObj, nil
 }
 
+// ExtractTimestamp extracts the timestamp from the ULID component of a rigid ID.
+// Returns the embedded timestamp or an error if extraction fails.
 func (r *Rigid) ExtractTimestamp(secureULID string) (time.Time, error) {
 	ulidObj, err := r.ExtractULID(secureULID)
 	if err != nil {
