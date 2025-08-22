@@ -269,6 +269,11 @@ MIT License - see LICENSE file for details.
 
 ## Changelog
 
+### v1.0.2
+- **Documentation**: Add comprehensive Go package documentation for pkg.go.dev
+- **Documentation**: Document all public types, functions, constants, and variables
+- **Documentation**: Include usage examples and security feature descriptions
+
 ### v1.0.1
 - **Documentation**: Update README with actual benchmark results from Apple M1 Pro
 - **Documentation**: Add comprehensive Table of Contents with navigation links
