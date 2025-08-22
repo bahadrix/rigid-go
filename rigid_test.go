@@ -275,9 +275,9 @@ func TestConcurrentGeneration(t *testing.T) {
 			for j := 0; j < idsPerGoroutine; j++ {
 				// Add small delay to prevent monotonic entropy overflow
 				time.Sleep(time.Microsecond * time.Duration(goroutineID*10+j))
-				
+
 				rigid, err := r.Generate()
-				
+
 				mu.Lock()
 				if err != nil {
 					// Only fail on unexpected errors, not entropy overflow
@@ -319,7 +319,7 @@ func TestConcurrentGeneration(t *testing.T) {
 
 	// We should have generated at least some IDs
 	assert.Greater(t, len(allRigids), 0, "Should generate at least some IDs")
-	
+
 	t.Logf("Generated %d rigids, %d duplicates, %d unique", len(allRigids), duplicates, len(seen))
 }
 
