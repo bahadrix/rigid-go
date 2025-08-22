@@ -7,6 +7,33 @@
 
 Cryptographically secured ULIDs with built-in integrity verification - Go port of the Python [rigid](https://github.com/bahadrix/rigid) library.
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [API Reference](#api-reference)
+  - [Creating a Rigid Instance](#creating-a-rigid-instance)
+  - [Generating IDs](#generating-ids)
+  - [Verification](#verification)
+  - [Utility Methods](#utility-methods)
+  - [Error Types](#error-types)
+- [ID Format](#id-format)
+- [Security Considerations](#security-considerations)
+- [Examples](#examples)
+  - [Basic Usage](#basic-usage)
+  - [Advanced Usage](#advanced-usage)
+- [Benchmarks](#benchmarks)
+- [Compatibility](#compatibility)
+- [Testing](#testing)
+- [Migration from v0.x](#migration-from-v0x)
+- [Contributing](#contributing)
+  - [Development Setup](#development-setup)
+  - [Issues and Support](#issues-and-support)
+- [License](#license)
+- [Changelog](#changelog)
+
 ## Overview
 
 Rigid is a Go library that generates cryptographically secure, unique identifiers based on ULIDs (Universally Unique Lexicographically Sortable Identifiers) with HMAC-based integrity verification. It provides tamper detection, metadata binding, and ensures that IDs cannot be forged without the secret key.
@@ -176,10 +203,10 @@ Run benchmarks with:
 go test -bench=. -benchmem
 ```
 
-Typical performance on modern hardware:
-- Generation: ~200,000 IDs/second
-- Verification: ~400,000 IDs/second
-- Generation with metadata: ~180,000 IDs/second
+Performance on Apple M1 Pro (darwin/arm64):
+- **Generation**: 1,885,310 ops/sec (631.3 ns/op, 624 B/op, 10 allocs/op)
+- **Verification**: 2,172,638 ops/sec (555.4 ns/op, 592 B/op, 9 allocs/op)
+- **Generation with metadata**: 1,750,885 ops/sec (689.7 ns/op, 712 B/op, 12 allocs/op)
 
 ## Compatibility
 
