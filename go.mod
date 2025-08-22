@@ -1,6 +1,6 @@
 module github.com/bahadrix/rigid-go
 
-go 1.25
+go 1.23
 
 require (
 	github.com/oklog/ulid/v2 v2.1.1
