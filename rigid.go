@@ -8,6 +8,7 @@ import (
 	"errors"
 	"math/rand"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/oklog/ulid/v2"
@@ -31,6 +32,7 @@ type Rigid struct {
 	secretKey       []byte
 	signatureLength int
 	entropy         *ulid.MonotonicEntropy
+	mu              sync.Mutex
 }
 
 type VerifyResult struct {
@@ -65,6 +67,9 @@ func NewRigid(secretKey []byte, signatureLength ...int) (*Rigid, error) {
 }
 
 func (r *Rigid) Generate(metadata ...string) (string, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
 	now := time.Now()
 	ulidObj, err := ulid.New(ulid.Timestamp(now), r.entropy)
 	if err != nil {
