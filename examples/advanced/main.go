@@ -79,7 +79,7 @@ func (s *SessionManager) ValidateSession(sessionID string) bool {
 }
 
 func main() {
-	fmt.Println("=== Advanced Rigid ULID Usage ===\n")
+	fmt.Println("=== Advanced Rigid ULID Usage ===")
 
 	secretKey := []byte("application-secret-key-2024")
 

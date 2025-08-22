@@ -10,7 +10,7 @@ import (
 func main() {
 	secretKey := []byte("your-secret-key-here")
 
-	fmt.Println("=== Rigid ULID Examples ===\n")
+	fmt.Println("=== Rigid ULID Examples ===")
 
 	r, err := rigid.NewRigid(secretKey)
 	if err != nil {
