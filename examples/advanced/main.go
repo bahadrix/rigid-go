@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"rigid-go"
+	"github.com/bahadrix/rigid-go"
 )
 
 type UserService struct {

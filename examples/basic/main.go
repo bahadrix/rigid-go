@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"rigid-go"
+	"github.com/bahadrix/rigid-go"
 )
 
 func main() {

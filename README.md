@@ -1,5 +1,10 @@
 # rigid-go
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/bahadrix/rigid-go.svg)](https://pkg.go.dev/github.com/bahadrix/rigid-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/bahadrix/rigid-go)](https://goreportcard.com/report/github.com/bahadrix/rigid-go)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![CI](https://github.com/bahadrix/rigid-go/workflows/CI/badge.svg)](https://github.com/bahadrix/rigid-go/actions)
+
 Cryptographically secured ULIDs with built-in integrity verification - Go port of the Python [rigid](https://github.com/bahadrix/rigid) library.
 
 ## Overview
@@ -19,7 +24,7 @@ Rigid is a Go library that generates cryptographically secure, unique identifier
 ## Installation
 
 ```bash
-go get github.com/yourusername/rigid-go
+go get github.com/bahadrix/rigid-go
 ```
 
 ## Quick Start
@@ -30,7 +35,7 @@ package main
 import (
     "fmt"
     "log"
-    "rigid-go"
+    "github.com/bahadrix/rigid-go"
 )
 
 func main() {
@@ -206,11 +211,30 @@ The new API is completely different from v0.x versions. Key changes:
 
 ## Contributing
 
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
 1. Fork the repository
-2. Create a feature branch
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Add tests for new functionality
-4. Ensure all tests pass
-5. Submit a pull request
+4. Ensure all tests pass (`go test -v`)
+5. Commit your changes (`git commit -m 'Add some amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+### Development Setup
+
+```bash
+git clone https://github.com/bahadrix/rigid-go.git
+cd rigid-go
+go mod download
+go test -v
+```
+
+### Issues and Support
+
+- 🐛 [Report bugs](https://github.com/bahadrix/rigid-go/issues/new?template=bug_report.md)
+- 💡 [Request features](https://github.com/bahadrix/rigid-go/issues/new?template=feature_request.md)
+- 💬 [Start discussions](https://github.com/bahadrix/rigid-go/discussions)
 
 ## License
 

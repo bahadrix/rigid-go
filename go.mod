@@ -1,4 +1,4 @@
-module rigid-go
+module github.com/bahadrix/rigid-go
 
 go 1.25
 
